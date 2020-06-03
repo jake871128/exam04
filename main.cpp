@@ -6,6 +6,8 @@ EventQueue queue(32 * EVENTS_EVENT_SIZE);
 EventQueue queue2;
 Thread t;
 float velocity = 0;
+int tmp = 0;
+float xvalue[15];
 
 #define UINT14_MAX        16383
 // FXOS8700CQ I2C address
@@ -47,7 +49,7 @@ RPCFunction rpc_acce(&acce_value, "acce_value");
 Timer t1;
 Timer t2;
 
-float xdata[15] = {0};
+
 
   
 Thread tt;
@@ -95,7 +97,7 @@ int main(){
 
 }
 
-int tmp = 0;
+
 void threeaxis(){
 
    t1.start(); 
@@ -150,15 +152,15 @@ void threeaxis(){
 
       t[2] = ((float)acc16) / 4096.0f;
 
-      xdata[tmp] = t[0];
-      pc.printf("tmp = %d, xdata = %1.4f\r\n", tmp ,xdata[tmp]);
+      xvalue[tmp] = t[0];
+      pc.printf("tmp = %d, xdata = %1.4f\r\n", tmp ,xvalue[tmp]);
       wait(0.1);
 
       if(tmp == 10){
 
         int j ;
         for(j = 1 ; j <= 10 ; j++){   
-          velocity = (xdata[j]*0.1) + velocity; 
+          velocity = (xvalue[j]*0.1) + velocity; 
         }
 
         velocity = velocity / 10.0;
@@ -225,7 +227,7 @@ void check_addr(char *xbee_reply, char *messenger){
 }
 
 void acce_value(Arguments *in, Reply *out){
-  /*
+ 
   uint8_t who_am_i, data[2], res[6];
   int16_t acc16;
   float t[3];
@@ -252,7 +254,7 @@ void acce_value(Arguments *in, Reply *out){
       acc16 -= UINT14_MAX;
   t[2] = ((float)acc16) / 4096.0f;
 
-*/
+
   //xbee.printf("X=%1.4f Y=%1.4f Z=%1.4f\r\n", t[0], t[1], t[2]);
 
   xbee.printf("velocity = %1.4f\r\n",velocity);
