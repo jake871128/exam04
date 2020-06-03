@@ -7,7 +7,7 @@ EventQueue queue2;
 Thread t;
 float velocity = 0;
 int tmp = 0;
-float xvalue[15];
+float xvalue[100];
 
 #define UINT14_MAX        16383
 // FXOS8700CQ I2C address
