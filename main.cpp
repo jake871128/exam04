@@ -5,6 +5,7 @@ RawSerial xbee(D12, D11);
 EventQueue queue(32 * EVENTS_EVENT_SIZE);
 EventQueue queue2;
 Thread t;
+float velocity = 0;
 
 #define UINT14_MAX        16383
 // FXOS8700CQ I2C address
@@ -152,7 +153,18 @@ void threeaxis(){
       xdata[tmp] = t[0];
       pc.printf("tmp = %d, xdata = %1.4f\r\n", tmp ,xdata[tmp]);
       wait(0.1);
-      if(tmp == 10) tmp = 0 ;
+
+      if(tmp == 10){
+
+        int j ;
+        for(j = 1 ; j <= 10 ; j++){   
+          velocity = (xdata[j]*0.1) + velocity; 
+        }
+
+        velocity = velocity / 10.0;
+        tmp = 0 ;
+        pc.printf("velocity = %1.4f\r\n\n", velocity);
+      } 
       //pc.printf("X=%1.4f Y=%1.4f Z=%1.4f\r\n", t[0], t[1], t[2]);
       
       
@@ -242,12 +254,7 @@ void acce_value(Arguments *in, Reply *out){
 
 */
   //xbee.printf("X=%1.4f Y=%1.4f Z=%1.4f\r\n", t[0], t[1], t[2]);
-  float velocity = 0;
-  int j ;
-  for(j = 1 ; j <= 10 ; j++){   
-      velocity = (xdata[j]*0.1) + velocity; 
-  }
-  velocity = velocity / 10.0;
+
   xbee.printf("velocity = %1.4f\r\n",velocity);
 
 }
